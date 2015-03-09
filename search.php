@@ -47,7 +47,7 @@ $response = file_get_contents($url);
 
         // }
 
-        $insert = "REPLACE INTO nyt.results (search, id,url,headline,snippet) VALUES ";
+        $insert = "REPLACE INTO nyt.results (search, id,web_url,headline,snippet) VALUES ";
 
         //loops through each post in the JSON file
         for($x=0;$x<10;$x++){
@@ -59,7 +59,7 @@ $response = file_get_contents($url);
             $values .= $json->response->docs[$x]->_id."' , '";
             $values .= mysqli_real_escape_string($connect,$json->response->docs[$x]->web_url)."' , '";
             $values .= mysqli_real_escape_string($connect,$json->response->docs[$x]->headline->main)."' , '";
-            $values .= mysqli_real_escape_string($connect,$json->response->docs[$x]->snippet)."' , '";
+            $values .= mysqli_real_escape_string($connect,$json->response->docs[$x]->snippet)."'),";
             //appends each post to the replace statement so that we can send all of the posts to the database
             //at once instead of one at a time
             $insert = $insert.$values;
@@ -83,12 +83,12 @@ $response = file_get_contents($url);
         echo "<h2>".$query ."</h2>";
         $searchresults = "select *
                     from nyt.results a
-                    where a.search = '".$query."' and url is not null;";
+                    where a.search = '".$query."' and web_url is not null;";
         if(!$result = $connect->query($searchresults)){
             die('There was an error running the query [' . $connect->error . ']');
         } else {
             while($row = $result->fetch_assoc()){
-                echo $row['id'] . '<br />' . $row['url'] . '<br />' . $row['headline'] . '<br />' . $row['snippet']. '<br />';
+                echo $row['id'] . '<br />' . $row['web_url'] . '<br />' . $row['headline'] . '<br />' . $row['snippet']. '<br />';
                 // echo $row['url'].";
 
             }

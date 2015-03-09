@@ -13,5 +13,4 @@ CREATE TABLE `results` (
 SELECT * FROM nyt.results;
 
 
-;
 
